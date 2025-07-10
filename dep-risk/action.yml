@@ -1,0 +1,134 @@
+name: 'Dep-Risk Scanner'
+description: 'Dependency vulnerability scanner with risk scoring'
+author: 'Dep-Risk Team'
+branding:
+  icon: 'shield'
+  color: 'red'
+
+inputs:
+  fail_threshold:
+    description: 'Risk score threshold to fail the check (0-10)'
+    required: false
+    default: '7.0'
+  
+  warn_threshold:
+    description: 'Risk score threshold to show warnings (0-10)'
+    required: false
+    default: '3.0'
+  
+  scan_paths:
+    description: 'Comma-separated paths to scan (default: auto-detect)'
+    required: false
+    default: ''
+  
+  exclude_paths:
+    description: 'Comma-separated paths to exclude from scanning'
+    required: false
+    default: 'node_modules,vendor,.git'
+  
+  languages:
+    description: 'Languages to scan (go,nodejs,python,java) or "auto"'
+    required: false
+    default: 'auto'
+  
+  scoring_config:
+    description: 'Path to custom scoring configuration file'
+    required: false
+    default: '.github/dep-risk.yml'
+  
+  cvss_weight:
+    description: 'Weight for CVSS component (0.0-1.0)'
+    required: false
+    default: '0.5'
+  
+  popularity_weight:
+    description: 'Weight for popularity component (0.0-1.0)'
+    required: false
+    default: '0.2'
+  
+  dependency_weight:
+    description: 'Weight for dependency depth component (0.0-1.0)'
+    required: false
+    default: '0.15'
+  
+  context_weight:
+    description: 'Weight for context component (0.0-1.0)'
+    required: false
+    default: '0.15'
+  
+  comment_mode:
+    description: 'PR comment mode (always,on-failure,never)'
+    required: false
+    default: 'on-failure'
+  
+  sarif_upload:
+    description: 'Upload SARIF results to GitHub Security tab'
+    required: false
+    default: 'true'
+  
+  dashboard_upload:
+    description: 'Upload results to Dep-Risk dashboard'
+    required: false
+    default: 'true'
+  
+  timeout:
+    description: 'Scan timeout in seconds'
+    required: false
+    default: '300'
+  
+  parallel_jobs:
+    description: 'Number of parallel scanning jobs'
+    required: false
+    default: '4'
+  
+  cache_enabled:
+    description: 'Enable vulnerability database caching'
+    required: false
+    default: 'true'
+  
+  cache_ttl:
+    description: 'Cache TTL in hours'
+    required: false
+    default: '24'
+  
+  github_token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+  
+  api_endpoint:
+    description: 'Dep-Risk API endpoint'
+    required: false
+    default: 'https://api.deprisk.io'
+  
+  api_key:
+    description: 'Dep-Risk API key (for dashboard features)'
+    required: false
+    default: ''
+
+outputs:
+  risk_score:
+    description: 'Overall risk score (0-10)'
+  
+  vulnerabilities_found:
+    description: 'Number of vulnerabilities found'
+  
+  high_risk_count:
+    description: 'Number of high-risk vulnerabilities'
+  
+  scan_status:
+    description: 'Scan status (success,failure,warning)'
+  
+  sarif_file:
+    description: 'Path to generated SARIF file'
+  
+  report_url:
+    description: 'URL to detailed report on dashboard'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+    DEP_RISK_API_KEY: ${{ inputs.api_key }}
+    DEP_RISK_API_ENDPOINT: ${{ inputs.api_endpoint }}

@@ -1,0 +1,39 @@
+# Go
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Go application binaries
+/dep-risk/dep-risk
+/dep-risk/api
+
+# Node.js / Next.js
+node_modules/
+dashboard/node_modules/
+/dashboard/.next/
+/dashboard/out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+
+# Local environment variables
+.env
+.env*.local
+
+# macOS
+.DS_Store
+
+# IDEs / Editors
+.vscode/
+.idea/
