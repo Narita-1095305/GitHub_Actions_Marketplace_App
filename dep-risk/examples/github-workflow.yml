@@ -1,0 +1,66 @@
+# Example GitHub Actions workflow using Dep-Risk
+name: Security Scan
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for creating check runs and comments
+      checks: write
+      pull-requests: write
+      # Required for uploading SARIF to Security tab
+      security-events: write
+      # Required for reading repository contents
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Dep-Risk Security Scan
+      uses: dep-risk/dep-risk@v1
+      with:
+        # Risk score threshold to fail the check (0-10)
+        fail_threshold: 7.0
+        
+        # Risk score threshold to show warnings (0-10)
+        warn_threshold: 3.0
+        
+        # Scoring weights (must sum to 1.0)
+        cvss_weight: 0.5
+        popularity_weight: 0.2
+        dependency_weight: 0.15
+        context_weight: 0.15
+        
+        # Comment behavior: always, on-failure, never
+        comment_mode: on-failure
+        
+        # Upload SARIF to GitHub Security tab
+        sarif_upload: true
+        
+        # Languages to scan (auto-detect by default)
+        languages: auto
+        
+        # Paths to exclude from scanning
+        exclude_paths: node_modules,vendor,.git,test
+        
+        # GitHub token (automatically provided)
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload scan results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dep-risk-report
+        path: |
+          dep-risk-report.json
+          dep-risk.sarif

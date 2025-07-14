@@ -1,0 +1,115 @@
+name: Complete Dep-Risk Security Scan
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  security-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    
+    # Required permissions for full GitHub integration
+    permissions:
+      contents: read          # Read repository contents
+      pull-requests: write    # Comment on PRs
+      checks: write          # Create check runs
+      security-events: write # Upload SARIF to Security tab
+      actions: read          # Read workflow information
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        # Fetch full history for better analysis
+        fetch-depth: 0
+    
+    - name: Run Dep-Risk Security Scan
+      uses: dep-risk/dep-risk@v1
+      with:
+        # Core thresholds
+        fail_threshold: 7.0
+        warn_threshold: 3.0
+        
+        # Scanning configuration
+        languages: auto
+        scan_paths: ''  # Auto-detect
+        exclude_paths: 'node_modules,vendor,.git,test,tests'
+        
+        # Scoring weights (must sum to 1.0)
+        cvss_weight: 0.5
+        popularity_weight: 0.2
+        dependency_weight: 0.15
+        context_weight: 0.15
+        
+        # Output configuration
+        comment_mode: on-failure  # always, on-failure, never
+        sarif_upload: true
+        dashboard_upload: true
+        
+        # Performance settings
+        timeout: 300
+        parallel_jobs: 4
+        cache_enabled: true
+        cache_ttl: 24
+        
+        # GitHub integration
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+        # Optional: Dashboard integration
+        api_key: ${{ secrets.DEP_RISK_API_KEY }}
+        api_endpoint: https://api.deprisk.io
+    
+    - name: Upload scan results as artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dep-risk-results-${{ github.run_number }}
+        path: |
+          dep-risk-report.json
+          dep-risk.sarif
+        retention-days: 30
+    
+    - name: Upload SARIF to GitHub Security tab
+      if: always()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: dep-risk.sarif
+        category: dep-risk
+    
+    # Optional: Notify team on high-risk findings
+    - name: Notify on high risk
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        text: "🚨 High-risk vulnerabilities detected in ${{ github.repository }}"
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # Optional: Generate security report for scheduled runs
+  generate-report:
+    if: github.event_name == 'schedule'
+    needs: security-scan
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download scan results
+      uses: actions/download-artifact@v4
+      with:
+        name: dep-risk-results-${{ github.run_number }}
+    
+    - name: Generate monthly report
+      run: |
+        echo "# Security Report - $(date)" > security-report.md
+        echo "Generated from scheduled scan" >> security-report.md
+        # Add custom reporting logic here
+    
+    - name: Upload report
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-report-$(date +%Y-%m)
+        path: security-report.md

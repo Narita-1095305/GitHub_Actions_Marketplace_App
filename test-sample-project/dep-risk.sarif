@@ -1,0 +1,451 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability GHSA-2c4m-59x9-fr2g in package github.com/gin-gonic/gin (version 1.9.0): Gin Web Framework does not properly sanitize filename parameter of Context.FileAttachment function"
+          },
+          "properties": {
+            "cvss": 2.5,
+            "package": "github.com/gin-gonic/gin",
+            "risk_score": 4.1,
+            "severity": "LOW",
+            "version": "1.9.0"
+          },
+          "ruleId": "GHSA-2c4m-59x9-fr2g"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2023-1737 in package github.com/gin-gonic/gin (version 1.9.0): Improper handling of filenames in Content-Disposition HTTP header in github.com/gin-gonic/gin"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "github.com/gin-gonic/gin",
+            "risk_score": 2.85,
+            "severity": "",
+            "version": "1.9.0"
+          },
+          "ruleId": "GO-2023-1737"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "Vulnerability GHSA-45x7-px36-x8w8 in package golang.org/x/crypto (version 0.5.0): Prefix Truncation Attack against ChaCha20-Poly1305 and Encrypt-then-MAC aka Terrapin"
+          },
+          "properties": {
+            "cvss": 8.5,
+            "package": "golang.org/x/crypto",
+            "risk_score": 7.324999999999999,
+            "severity": "HIGH",
+            "version": "0.5.0"
+          },
+          "ruleId": "GHSA-45x7-px36-x8w8"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2023-2402 in package golang.org/x/crypto (version 0.5.0): Man-in-the-middle attacker can compromise integrity of secure channel in golang.org/x/crypto"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/crypto",
+            "risk_score": 3.075,
+            "severity": "",
+            "version": "0.5.0"
+          },
+          "ruleId": "GO-2023-2402"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "Vulnerability GHSA-v778-237x-gjrc in package golang.org/x/crypto (version 0.5.0): Misuse of ServerConfig.PublicKeyCallback may cause authorization bypass in golang.org/x/crypto"
+          },
+          "properties": {
+            "cvss": 8.5,
+            "package": "golang.org/x/crypto",
+            "risk_score": 7.324999999999999,
+            "severity": "HIGH",
+            "version": "0.5.0"
+          },
+          "ruleId": "GHSA-v778-237x-gjrc"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-3321 in package golang.org/x/crypto (version 0.5.0): Misuse of connection.serverAuthenticate may cause authorization bypass in golang.org/x/crypto"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/crypto",
+            "risk_score": 3.075,
+            "severity": "",
+            "version": "0.5.0"
+          },
+          "ruleId": "GO-2024-3321"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "Vulnerability GHSA-hcg3-q754-cr77 in package golang.org/x/crypto (version 0.5.0): golang.org/x/crypto Vulnerable to Denial of Service (DoS) via Slow or Incomplete Key Exchange"
+          },
+          "properties": {
+            "cvss": 8.5,
+            "package": "golang.org/x/crypto",
+            "risk_score": 7.324999999999999,
+            "severity": "HIGH",
+            "version": "0.5.0"
+          },
+          "ruleId": "GHSA-hcg3-q754-cr77"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3487 in package golang.org/x/crypto (version 0.5.0): Potential denial of service in golang.org/x/crypto"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/crypto",
+            "risk_score": 3.075,
+            "severity": "",
+            "version": "0.5.0"
+          },
+          "ruleId": "GO-2025-3487"
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability GHSA-2wrh-6pvc-2jm9 in package golang.org/x/net (version 0.7.0): Improper rendering of text nodes in golang.org/x/net/html"
+          },
+          "properties": {
+            "cvss": 2.5,
+            "package": "golang.org/x/net",
+            "risk_score": 4.4,
+            "severity": "LOW",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-2wrh-6pvc-2jm9"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2023-1988 in package golang.org/x/net (version 0.7.0): Improper rendering of text nodes in golang.org/x/net/html"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2023-1988"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "Vulnerability GHSA-4374-p667-p6c8 in package golang.org/x/net (version 0.7.0): HTTP/2 rapid reset can cause excessive work in net/http"
+          },
+          "properties": {
+            "cvss": 8.5,
+            "package": "golang.org/x/net",
+            "risk_score": 7.3999999999999995,
+            "severity": "HIGH",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-4374-p667-p6c8"
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability GHSA-qppj-fm5r-hxr3 in package golang.org/x/net (version 0.7.0): HTTP/2 Stream Cancellation Attack"
+          },
+          "properties": {
+            "cvss": 2.5,
+            "package": "golang.org/x/net",
+            "risk_score": 4.4,
+            "severity": "LOW",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-qppj-fm5r-hxr3"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2023-2102 in package golang.org/x/net (version 0.7.0): HTTP/2 rapid reset can cause excessive work in net/http"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2023-2102"
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability GHSA-4v7x-pqxf-cx7m in package golang.org/x/net (version 0.7.0): net/http, x/net/http2: close connections when receiving too many headers"
+          },
+          "properties": {
+            "cvss": 2.5,
+            "package": "golang.org/x/net",
+            "risk_score": 4.4,
+            "severity": "LOW",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-4v7x-pqxf-cx7m"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-2687 in package golang.org/x/net (version 0.7.0): HTTP/2 CONTINUATION flood in net/http"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2024-2687"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-3333 in package golang.org/x/net (version 0.7.0): Non-linear parsing of case-insensitive content in golang.org/x/net/html"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2024-3333"
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability GHSA-qxp5-gwg8-xv66 in package golang.org/x/net (version 0.7.0): HTTP Proxy bypass using IPv6 Zone IDs in golang.org/x/net"
+          },
+          "properties": {
+            "cvss": 2.5,
+            "package": "golang.org/x/net",
+            "risk_score": 4.4,
+            "severity": "LOW",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-qxp5-gwg8-xv66"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3503 in package golang.org/x/net (version 0.7.0): HTTP Proxy bypass using IPv6 Zone IDs in golang.org/x/net"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2025-3503"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GHSA-vvgc-356p-c3xw in package golang.org/x/net (version 0.7.0): golang.org/x/net vulnerable to Cross-site Scripting"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GHSA-vvgc-356p-c3xw"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3595 in package golang.org/x/net (version 0.7.0): Incorrect Neutralization of Input During Web Page Generation in x/net in golang.org/x/net"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "golang.org/x/net",
+            "risk_score": 3.15,
+            "severity": "",
+            "version": "0.7.0"
+          },
+          "ruleId": "GO-2025-3595"
+        },
+        {
+          "level": "error",
+          "message": {
+            "text": "Vulnerability GHSA-8r3f-844c-mc37 in package google.golang.org/protobuf (version 1.28.1): Golang protojson.Unmarshal function infinite loop when unmarshaling certain forms of invalid JSON"
+          },
+          "properties": {
+            "cvss": 8.5,
+            "package": "google.golang.org/protobuf",
+            "risk_score": 7.1,
+            "severity": "HIGH",
+            "version": "1.28.1"
+          },
+          "ruleId": "GHSA-8r3f-844c-mc37"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-2611 in package google.golang.org/protobuf (version 1.28.1): Infinite loop in JSON unmarshaling in google.golang.org/protobuf"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "google.golang.org/protobuf",
+            "risk_score": 2.85,
+            "severity": "",
+            "version": "1.28.1"
+          },
+          "ruleId": "GO-2024-2611"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-3105 in package stdlib (version 1.21): Stack exhaustion in all Parse functions in go/parser"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2024-3105"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-3106 in package stdlib (version 1.21): Stack exhaustion in Decoder.Decode in encoding/gob"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2024-3106"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2024-3107 in package stdlib (version 1.21): Stack exhaustion in Parse in go/build/constraint"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2024-3107"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3373 in package stdlib (version 1.21): Usage of IPv6 zone IDs can bypass URI name constraints in crypto/x509"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3373"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3420 in package stdlib (version 1.21): Sensitive headers incorrectly sent after cross-domain redirect in net/http"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3420"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3447 in package stdlib (version 1.21): Timing sidechannel for P-256 on ppc64le in crypto/internal/nistec"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3447"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3563 in package stdlib (version 1.21): Request smuggling due to acceptance of invalid chunked data in net/http"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3563"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3750 in package stdlib (version 1.21): Inconsistent handling of O_CREATE|O_EXCL on Unix and Windows in os in syscall"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3750"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "Vulnerability GO-2025-3751 in package stdlib (version 1.21): Sensitive headers not cleared on cross-origin redirect in net/http"
+          },
+          "properties": {
+            "cvss": 0,
+            "package": "stdlib",
+            "risk_score": 3.45,
+            "severity": "",
+            "version": "1.21"
+          },
+          "ruleId": "GO-2025-3751"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/dep-risk/dep-risk",
+          "name": "dep-risk",
+          "version": "1.0.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

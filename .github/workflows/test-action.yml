@@ -1,0 +1,41 @@
+name: Test Dep-Risk Action
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      security-events: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Test Dep-Risk Action on sample project
+      uses: ./dep-risk
+      with:
+        fail_threshold: 8.0
+        warn_threshold: 3.0
+        comment_mode: always
+        sarif_upload: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}/test-sample-project
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dep-risk-test-results
+        path: |
+          dep-risk-report.json
+          dep-risk.sarif
+        retention-days: 7

@@ -1,0 +1,11 @@
+fail_threshold: 7.0
+warn_threshold: 3.0
+cvss_weight: 0.5
+popularity_weight: 0.2
+dependency_weight: 0.15
+context_weight: 0.15
+comment_mode: "on-failure"
+sarif_upload: true
+ignore_list:
+  # 例: 特定のCVEを無視する場合
+  # - "CVE-2023-1234"
