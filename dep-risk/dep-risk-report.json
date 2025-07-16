@@ -1,0 +1,265 @@
+{
+  "overall_score": 7.324999999999999,
+  "max_score": 7.324999999999999,
+  "vulnerability_scores": [
+    {
+      "overall": 7.324999999999999,
+      "cvss_component": 8.5,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 6.5,
+      "vulnerability": {
+        "id": "GHSA-hcg3-q754-cr77",
+        "package": "golang.org/x/crypto",
+        "version": "0.31.0",
+        "cvss": 8.5,
+        "severity": "HIGH",
+        "summary": "golang.org/x/crypto Vulnerable to Denial of Service (DoS) via Slow or Incomplete Key Exchange",
+        "description": "SSH servers which implement file transfer protocols are vulnerable to a denial of service attack from clients which complete the key exchange slowly, or not at all, causing pending content to be read into memory, but never transmitted.",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2025-22869",
+          "https://github.com/golang/crypto/commit/7292932d45d55c7199324ab0027cc86e8198aa22",
+          "https://github.com/golang/crypto",
+          "https://go-review.googlesource.com/c/crypto/+/652135",
+          "https://go.dev/cl/652135",
+          "https://go.dev/issue/71931",
+          "https://pkg.go.dev/vuln/GO-2025-3487",
+          "https://security.netapp.com/advisory/ntap-20250411-0010"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.075,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 6.5,
+      "vulnerability": {
+        "id": "GO-2025-3487",
+        "package": "golang.org/x/crypto",
+        "version": "0.31.0",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Potential denial of service in golang.org/x/crypto",
+        "description": "SSH servers which implement file transfer protocols are vulnerable to a denial of service attack from clients which complete the key exchange slowly, or not at all, causing pending content to be read into memory, but never transmitted.",
+        "references": [
+          "https://go.dev/cl/652135",
+          "https://go.dev/issue/71931"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.15,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 7,
+      "vulnerability": {
+        "id": "GO-2024-3333",
+        "package": "golang.org/x/net",
+        "version": "0.25.0",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Non-linear parsing of case-insensitive content in golang.org/x/net/html",
+        "description": "An attacker can craft an input to the Parse functions that would be processed non-linearly with respect to its length, resulting in extremely slow parsing. This could cause a denial of service.",
+        "references": [
+          "https://go.dev/cl/637536",
+          "https://go.dev/issue/70906",
+          "https://groups.google.com/g/golang-announce/c/wSCRmFnNmPA/m/Lvcd0mRMAwAJ"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 4.4,
+      "cvss_component": 2.5,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 7,
+      "vulnerability": {
+        "id": "GHSA-qxp5-gwg8-xv66",
+        "package": "golang.org/x/net",
+        "version": "0.25.0",
+        "cvss": 2.5,
+        "severity": "LOW",
+        "summary": "HTTP Proxy bypass using IPv6 Zone IDs in golang.org/x/net",
+        "description": "Matching of hosts against proxy patterns can improperly treat an IPv6 zone ID as a hostname component. For example, when the NO_PROXY environment variable is set to \"*.example.com\", a request to \"[::1%25.example.com]:80` will incorrectly match and not be proxied.",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2025-22870",
+          "https://go-review.googlesource.com/q/project:net",
+          "https://go.dev/cl/654697",
+          "https://go.dev/issue/71984",
+          "https://pkg.go.dev/vuln/GO-2025-3503",
+          "https://security.netapp.com/advisory/ntap-20250509-0007",
+          "http://www.openwall.com/lists/oss-security/2025/03/07/2"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.15,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 7,
+      "vulnerability": {
+        "id": "GO-2025-3503",
+        "package": "golang.org/x/net",
+        "version": "0.25.0",
+        "cvss": 0,
+        "severity": "",
+        "summary": "HTTP Proxy bypass using IPv6 Zone IDs in golang.org/x/net",
+        "description": "Matching of hosts against proxy patterns can improperly treat an IPv6 zone ID as a hostname component. For example, when the NO_PROXY environment variable is set to \"*.example.com\", a request to \"[::1%25.example.com]:80` will incorrectly match and not be proxied.",
+        "references": [
+          "https://go.dev/cl/654697",
+          "https://go.dev/issue/71984"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.15,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 7,
+      "vulnerability": {
+        "id": "GHSA-vvgc-356p-c3xw",
+        "package": "golang.org/x/net",
+        "version": "0.25.0",
+        "cvss": 0,
+        "severity": "",
+        "summary": "golang.org/x/net vulnerable to Cross-site Scripting",
+        "description": "The tokenizer incorrectly interprets tags with unquoted attribute values that end with a solidus character (/) as self-closing. When directly using Tokenizer, this can result in such tags incorrectly being marked as self-closing, and when using the Parse functions, this can result in content following such tags as being placed in the wrong scope during DOM construction, but only when tags are in foreign content (e.g. \u003cmath\u003e, \u003csvg\u003e, etc contexts).",
+        "references": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2025-22872",
+          "https://go.dev/cl/662715",
+          "https://go.dev/issue/73070",
+          "https://groups.google.com/g/golang-announce/c/ezSKR9vqbqA",
+          "https://pkg.go.dev/vuln/GO-2025-3595",
+          "https://security.netapp.com/advisory/ntap-20250516-0007"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.15,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 2,
+      "context_component": 7,
+      "vulnerability": {
+        "id": "GO-2025-3595",
+        "package": "golang.org/x/net",
+        "version": "0.25.0",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Incorrect Neutralization of Input During Web Page Generation in x/net in golang.org/x/net",
+        "description": "The tokenizer incorrectly interprets tags with unquoted attribute values that end with a solidus character (/) as self-closing. When directly using Tokenizer, this can result in such tags incorrectly being marked as self-closing, and when using the Parse functions, this can result in content following such tags as being placed in the wrong scope during DOM construction, but only when tags are in foreign content (e.g. \u003cmath\u003e, \u003csvg\u003e, etc contexts).",
+        "references": [
+          "https://go.dev/cl/662715",
+          "https://go.dev/issue/73070",
+          "https://groups.google.com/g/golang-announce/c/ezSKR9vqbqA"
+        ],
+        "is_direct": true
+      }
+    },
+    {
+      "overall": 3.45,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 6,
+      "context_component": 5,
+      "vulnerability": {
+        "id": "GO-2025-3447",
+        "package": "stdlib",
+        "version": "1.23.5",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Timing sidechannel for P-256 on ppc64le in crypto/internal/nistec",
+        "description": "Due to the usage of a variable time instruction in the assembly implementation of an internal function, a small number of bits of secret scalars are leaked on the ppc64le architecture. Due to the way this function is used, we do not believe this leakage is enough to allow recovery of the private key when P-256 is used in any well known protocols.",
+        "references": [
+          "https://go.dev/cl/643735",
+          "https://go.dev/issue/71383",
+          "https://groups.google.com/g/golang-announce/c/xU1ZCHUZw3k"
+        ],
+        "is_direct": false
+      }
+    },
+    {
+      "overall": 3.45,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 6,
+      "context_component": 5,
+      "vulnerability": {
+        "id": "GO-2025-3563",
+        "package": "stdlib",
+        "version": "1.23.5",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Request smuggling due to acceptance of invalid chunked data in net/http",
+        "description": "The net/http package improperly accepts a bare LF as a line terminator in chunked data chunk-size lines. This can permit request smuggling if a net/http server is used in conjunction with a server that incorrectly accepts a bare LF as part of a chunk-ext.",
+        "references": [
+          "https://go.dev/cl/652998",
+          "https://go.dev/issue/71988",
+          "https://groups.google.com/g/golang-announce/c/Y2uBTVKjBQk"
+        ],
+        "is_direct": false
+      }
+    },
+    {
+      "overall": 3.45,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 6,
+      "context_component": 5,
+      "vulnerability": {
+        "id": "GO-2025-3750",
+        "package": "stdlib",
+        "version": "1.23.5",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Inconsistent handling of O_CREATE|O_EXCL on Unix and Windows in os in syscall",
+        "description": "os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and Windows systems when the target path was a dangling symlink. On Unix systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks. On Windows, when the target path was a symlink to a nonexistent location, OpenFile would create a file in that location. OpenFile now always returns an error when the O_CREATE and O_EXCL flags are both set and the target path is a symlink.",
+        "references": [
+          "https://go.dev/cl/672396",
+          "https://go.dev/issue/73702",
+          "https://groups.google.com/g/golang-announce/c/ufZ8WpEsA3A"
+        ],
+        "is_direct": false
+      }
+    },
+    {
+      "overall": 3.45,
+      "cvss_component": 0,
+      "popularity_component": 9,
+      "dependency_component": 6,
+      "context_component": 5,
+      "vulnerability": {
+        "id": "GO-2025-3751",
+        "package": "stdlib",
+        "version": "1.23.5",
+        "cvss": 0,
+        "severity": "",
+        "summary": "Sensitive headers not cleared on cross-origin redirect in net/http",
+        "description": "Proxy-Authorization and Proxy-Authenticate headers persisted on cross-origin redirects potentially leaking sensitive information.",
+        "references": [
+          "https://go.dev/cl/679257",
+          "https://go.dev/issue/73816",
+          "https://groups.google.com/g/golang-announce/c/ufZ8WpEsA3A"
+        ],
+        "is_direct": false
+      }
+    }
+  ],
+  "summary": {
+    "total_vulnerabilities": 11,
+    "high_risk_count": 1,
+    "medium_risk_count": 1,
+    "low_risk_count": 9,
+    "average_score": 3.7454545454545456
+  }
+}

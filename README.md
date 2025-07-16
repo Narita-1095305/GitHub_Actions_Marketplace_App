@@ -80,5 +80,21 @@ go build -o dep-risk ./cmd/action
 ./dep-risk --path /path/to/your/project
 ```
 
-## 備考
-現在作成中のため、使用できません。
+## 📚 ドキュメント
+
+- 🚀 **[初心者向けガイド](./GETTING_STARTED.md)** - 5分で始められる詳しい使い方
+- 📖 **[詳細仕様書](./detailed_requirements_and_design.md)** - 技術的な詳細情報
+- 🧮 **[リスクスコア算定](./risk_scoring_algorithm_detailed.md)** - スコア計算の仕組み
+- 🔧 **[CLI/APIリファレンス](./dep-risk/README.md)** - 開発者向け情報
+
+## 🎯 クイックスタート
+
+初めて使用する方は **[GETTING_STARTED.md](./GETTING_STARTED.md)** をご覧ください。5分でセットアップが完了します！
+
+```yaml
+# .github/workflows/security.yml
+- uses: dep-risk/dep-risk@v1
+  with:
+    fail_threshold: 7.0
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+```
