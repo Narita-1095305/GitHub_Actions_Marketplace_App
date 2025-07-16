@@ -37,3 +37,21 @@ yarn-error.log*
 # IDEs / Editors
 .vscode/
 .idea/
+
+# Logs and temporary files
+*.log
+*.pid
+api.log
+
+# Development reports and plans (keep only essential docs)
+*REPORT*.md
+*COMPLETE*.md
+*PLAN*.md
+*_TEST_*.md
+*_INTEGRATION_*.md
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Temporary files
+tmp_*

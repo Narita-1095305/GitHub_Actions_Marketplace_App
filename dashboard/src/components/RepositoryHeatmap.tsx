@@ -16,7 +16,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@chakra-ui/icons'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo, useMemo } from 'react'
 
 interface RepositoryStats {
   repository: {
@@ -36,7 +36,7 @@ interface RepositoryHeatmapProps {
   data?: RepositoryStats[]
 }
 
-export function RepositoryHeatmap({ data }: RepositoryHeatmapProps) {
+export const RepositoryHeatmap = memo(function RepositoryHeatmap({ data }: RepositoryHeatmapProps) {
   const [isClient, setIsClient] = useState(false)
   
   useEffect(() => {
@@ -228,4 +228,4 @@ export function RepositoryHeatmap({ data }: RepositoryHeatmapProps) {
       </CardBody>
     </Card>
   )
-}
+})

@@ -1,5 +1,6 @@
 import useSWR from 'swr'
 import axios from 'axios'
+import type { ApiResponse, PaginatedResponse, Vulnerability, Repository } from '@/types/api'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
@@ -72,11 +73,15 @@ export function useDashboardData(orgName: string) {
           }
         })
         
-        // Log successful API connection
-        console.log('✅ API connected successfully:', url)
+        // Log successful API connection (development only)
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ API connected successfully:', url)
+        }
         return response.data
       } catch (error: any) {
-        console.warn('⚠️ API connection failed, using mock data:', error.message)
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('⚠️ API connection failed, using mock data:', error.message)
+        }
         
         // Return mock data structure that matches API response
         return { 
@@ -93,17 +98,23 @@ export function useDashboardData(orgName: string) {
       errorRetryCount: 3,
       errorRetryInterval: 2000,
       onSuccess: (data) => {
-        console.log('📊 Dashboard data updated:', new Date().toLocaleTimeString())
+        if (process.env.NODE_ENV === 'development') {
+          console.log('📊 Dashboard data updated:', new Date().toLocaleTimeString())
+        }
       },
       onError: (error) => {
-        console.warn('🔄 Retrying API connection...', error.message)
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('🔄 Retrying API connection...', error.message)
+        }
       }
     }
   )
 
   // Manual refresh function for user-triggered updates
   const refreshData = () => {
-    console.log('🔄 Manual refresh triggered')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔄 Manual refresh triggered')
+    }
     mutate()
   }
 
@@ -112,7 +123,7 @@ export function useDashboardData(orgName: string) {
     error,
     isLoading,
     refreshData,
-    isConnected: !error && data?.success !== false,
+    isConnected: !error && !!data,
   }
 }
 

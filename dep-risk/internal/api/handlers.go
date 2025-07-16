@@ -391,54 +391,333 @@ func (s *Server) buildDashboardSummary(orgID uint) (*models.DashboardSummary, er
 }
 
 // Temporarily disabled complex functions to fix compilation errors
-// func (s *Server) buildRiskTrend(orgID uint, days int) ([]models.RiskTrendPoint, error) { ... }
+func (s *Server) buildRiskTrend(orgID uint, days int) ([]models.RiskTrendPoint, error) {
+	db := database.GetDB()
+	var trend []models.RiskTrendPoint
+
+	// This query calculates the average risk score per day for the last `days` days.
+	// It's a bit complex and might need optimization for very large datasets.
+	if err := db.Raw(`
+		SELECT
+			DATE(s.created_at) as date,
+			AVG(s.overall_risk_score) as average_risk_score
+		FROM scans s
+		JOIN repositories r ON s.repo_id = r.id
+		WHERE r.org_id = ? AND s.created_at >= ?
+		GROUP BY DATE(s.created_at)
+		ORDER BY date ASC
+	`, orgID, time.Now().AddDate(0, 0, -days)).Scan(&trend).Error; err != nil {
+		return nil, err
+	}
+
+	return trend, nil
+}
+
 // func (s *Server) buildRepositoryStats(orgID uint) ([]models.RepositoryStats, error) { ... }
 
 // Additional handlers for other endpoints...
 func (s *Server) getOrganizationStats(c *gin.Context) {
-	// TODO: Implement organization statistics
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	orgName := c.Param("org")
+	db := database.GetDB()
+
+	var org models.Organization
+	if err := db.Where("git_hub_org = ?", orgName).First(&org).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "Organization not found",
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, models.APIResponse{
+				Success: false,
+				Error:   "Database error while finding organization",
+			})
+		}
+		return
+	}
+
+	summary, err := s.buildDashboardSummary(org.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to build dashboard summary: " + err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    summary,
 	})
 }
 
 func (s *Server) getRepositoryScans(c *gin.Context) {
-	// TODO: Implement repository scans
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	owner := c.Param("owner")
+	repoName := c.Param("repo")
+
+	var pagination models.PaginationParams
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		c.JSON(http.StatusBadRequest, models.APIResponse{
+			Success: false,
+			Error:   "Invalid pagination parameters",
+		})
+		return
+	}
+
+	db := database.GetDB()
+
+	var repo models.Repository
+	if err := db.Joins("JOIN organizations ON organizations.id = repositories.org_id").
+		Where("organizations.git_hub_org = ? AND repositories.git_hub_repo = ?", owner, repoName).
+		First(&repo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "Repository not found",
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, models.APIResponse{
+				Success: false,
+				Error:   "Database error while finding repository",
+			})
+		}
+		return
+	}
+
+	var scans []models.Scan
+	var total int64
+
+	offset := (pagination.Page - 1) * pagination.PageSize
+
+	if err := db.Model(&models.Scan{}).Where("repo_id = ?", repo.ID).Count(&total).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to count scans",
+		})
+		return
+	}
+
+	if err := db.Where("repo_id = ?").
+		Order("created_at DESC").
+		Offset(offset).
+		Limit(pagination.PageSize).
+		Find(&scans).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch scans",
+		})
+		return
+	}
+
+	totalPages := int(total) / pagination.PageSize
+	if int(total)%pagination.PageSize > 0 {
+		totalPages++
+	}
+
+	response := models.PaginatedResponse{
+		Data: scans,
+		Pagination: &models.Pagination{
+			Page:       pagination.Page,
+			PageSize:   pagination.PageSize,
+			Total:      total,
+			TotalPages: totalPages,
+		},
+	}
+
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    response,
 	})
 }
 
 func (s *Server) getRepositoryHistory(c *gin.Context) {
-	// TODO: Implement repository history
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	owner := c.Param("owner")
+	repoName := c.Param("repo")
+
+	db := database.GetDB()
+
+	var repo models.Repository
+	if err := db.Joins("JOIN organizations ON organizations.id = repositories.org_id").
+		Where("organizations.git_hub_org = ? AND repositories.git_hub_repo = ?", owner, repoName).
+		First(&repo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "Repository not found",
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, models.APIResponse{
+				Success: false,
+				Error:   "Database error while finding repository",
+			})
+		}
+		return
+	}
+
+	// For repository history, we can return the risk trend for that specific repo
+	var trend []models.RiskTrendPoint
+	if err := db.Raw(`
+		SELECT
+			DATE(created_at) as date,
+			AVG(overall_risk_score) as average_risk_score
+		FROM scans
+		WHERE repo_id = ?
+		GROUP BY DATE(created_at)
+		ORDER BY date ASC
+	`, repo.ID).Scan(&trend).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch repository history",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    trend,
 	})
 }
 
 func (s *Server) getLatestScan(c *gin.Context) {
-	// TODO: Implement latest scan
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	owner := c.Param("owner")
+	repoName := c.Param("repo")
+
+	db := database.GetDB()
+
+	var repo models.Repository
+	if err := db.Joins("JOIN organizations ON organizations.id = repositories.org_id").
+		Where("organizations.git_hub_org = ? AND repositories.git_hub_repo = ?", owner, repoName).
+		First(&repo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "Repository not found",
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, models.APIResponse{
+				Success: false,
+				Error:   "Database error while finding repository",
+			})
+		}
+		return
+	}
+
+	var latestScan models.Scan
+	if err := db.Where("repo_id = ?").
+		Order("created_at DESC").
+		Preload("Vulnerabilities").
+		First(&latestScan).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "No scans found for this repository",
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, models.APIResponse{
+				Success: false,
+				Error:   "Failed to fetch latest scan",
+			})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    latestScan,
 	})
 }
 
 func (s *Server) getVulnerabilities(c *gin.Context) {
-	// TODO: Implement vulnerabilities list
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	// Parse query parameters
+	page := 1
+	pageSize := 20
+	
+	if p := c.Query("page"); p != "" {
+		if parsed, err := strconv.Atoi(p); err == nil && parsed > 0 {
+			page = parsed
+		}
+	}
+	
+	if ps := c.Query("page_size"); ps != "" {
+		if parsed, err := strconv.Atoi(ps); err == nil && parsed > 0 && parsed <= 100 {
+			pageSize = parsed
+		}
+	}
+	
+	// Calculate offset
+	offset := (page - 1) * pageSize
+	
+	// Get vulnerabilities with pagination
+	var vulnerabilities []models.Vulnerability
+	var total int64
+	
+	db := database.GetDB()
+	
+	// Count total vulnerabilities
+	if err := db.Model(&models.Vulnerability{}).Count(&total).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to count vulnerabilities",
+		})
+		return
+	}
+	
+	// Get vulnerabilities with pagination and preload scan data
+	if err := db.Preload("Scan").Preload("Scan.Repository").
+		Offset(offset).Limit(pageSize).
+		Order("risk_score DESC, created_at DESC").
+		Find(&vulnerabilities).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch vulnerabilities",
+		})
+		return
+	}
+	
+	// Calculate pagination info
+	totalPages := int(total) / pageSize
+	if int(total)%pageSize > 0 {
+		totalPages++
+	}
+	
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data: models.PaginatedResponse{
+			Data: vulnerabilities,
+			Pagination: &models.Pagination{
+				Page:       page,
+				PageSize:   pageSize,
+				Total:      total,
+				TotalPages: totalPages,
+			},
+		},
 	})
 }
 
 func (s *Server) getVulnerability(c *gin.Context) {
-	// TODO: Implement vulnerability details
-	c.JSON(http.StatusNotImplemented, models.APIResponse{
-		Success: false,
-		Error:   "Not implemented yet",
+	id := c.Param("id")
+	
+	var vulnerability models.Vulnerability
+	db := database.GetDB()
+	
+	if err := db.Preload("Scan").Preload("Scan.Repository").
+		First(&vulnerability, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, models.APIResponse{
+				Success: false,
+				Error:   "Vulnerability not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, models.APIResponse{
+			Success: false,
+			Error:   "Failed to fetch vulnerability",
+		})
+		return
+	}
+	
+	c.JSON(http.StatusOK, models.APIResponse{
+		Success: true,
+		Data:    vulnerability,
 	})
 }

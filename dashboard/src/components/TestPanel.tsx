@@ -20,7 +20,7 @@ import {
   Progress,
   Code,
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useHealthCheck } from '@/lib/api'
 
 interface TestResult {
@@ -36,7 +36,7 @@ export function TestPanel() {
   const [isRunning, setIsRunning] = useState(false)
   const { data: healthData, error: healthError } = useHealthCheck()
 
-  const runTests = async () => {
+  const runTests = useCallback(async () => {
     setIsRunning(true)
     const results: TestResult[] = []
 
@@ -114,13 +114,13 @@ export function TestPanel() {
 
     setTestResults(results)
     setIsRunning(false)
-  }
+  }, [healthData, healthError])
 
   useEffect(() => {
     // Run tests automatically on component mount
     const timer = setTimeout(runTests, 1000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [runTests])
 
   const getStatusColor = (status: string) => {
     switch (status) {

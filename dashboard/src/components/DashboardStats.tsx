@@ -17,14 +17,14 @@ import {
 } from '@chakra-ui/react'
 import { WarningIcon, CheckCircleIcon, InfoIcon, TimeIcon } from '@chakra-ui/icons'
 import { DashboardData } from '@/lib/api'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 
 interface DashboardStatsProps {
   data?: DashboardData
   isLoading: boolean
 }
 
-export function DashboardStats({ data, isLoading }: DashboardStatsProps) {
+export const DashboardStats = memo(function DashboardStats({ data, isLoading }: DashboardStatsProps) {
   const [isClient, setIsClient] = useState(false)
   
   useEffect(() => {
@@ -173,4 +173,4 @@ export function DashboardStats({ data, isLoading }: DashboardStatsProps) {
       </Card>
     </SimpleGrid>
   )
-}
+})

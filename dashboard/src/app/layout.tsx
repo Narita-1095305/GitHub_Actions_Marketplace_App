@@ -1,4 +1,5 @@
 import { ChakraProviders } from '@/lib/chakra'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ChakraProviders>{children}</ChakraProviders>
+        <ChakraProviders>
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
+        </ChakraProviders>
       </body>
     </html>
   )

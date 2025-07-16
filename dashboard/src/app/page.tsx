@@ -25,12 +25,14 @@ import {
 } from '@chakra-ui/react'
 import { SearchIcon, WarningIcon, CheckCircleIcon, InfoIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { DashboardStats } from '@/components/DashboardStats'
-import { RiskTrendChart } from '@/components/RiskTrendChart'
-import { VulnerabilityTable } from '@/components/VulnerabilityTable'
-import { RepositoryHeatmap } from '@/components/RepositoryHeatmap'
 import { useDashboardData, useHealthCheck } from '@/lib/api'
 import { TestPanel } from '@/components/TestPanel'
+
+const RiskTrendChart = dynamic(() => import('@/components/RiskTrendChart').then(mod => mod.RiskTrendChart), { ssr: false, loading: () => <p>Loading chart...</p> })
+const RepositoryHeatmap = dynamic(() => import('@/components/RepositoryHeatmap').then(mod => mod.RepositoryHeatmap), { ssr: false, loading: () => <p>Loading heatmap...</p> })
+const VulnerabilityTable = dynamic(() => import('@/components/VulnerabilityTable').then(mod => mod.VulnerabilityTable), { ssr: false, loading: () => <p>Loading table...</p> })
 
 export default function Dashboard() {
   const [selectedOrg, setSelectedOrg] = useState('example-org')
